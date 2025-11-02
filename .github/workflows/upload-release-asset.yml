@@ -1,0 +1,35 @@
+name: Add release zip
+
+# Trigger on release creation
+on:
+    release:
+        types: [created]
+
+permissions:
+    contents: read      
+jobs:
+    build_and_upload:
+        runs-on: ubuntu-latest
+    
+        env:
+          FOLDER_TO_ZIP: 'chrome-game-searcher' 
+          ASSET_NAME_PREFIX: 'chrome-game-searcher' 
+
+        steps:
+          - name: Checkout repo
+            uses: actions/checkout@v4
+          
+          - name: Get zip name
+            id: set_names
+            run: echo "ZIP_NAME=${{ env.ASSET_NAME_PREFIX }}-${{ github.event.release.tag_name }}.zip" >> $GITHUB_OUTPUT
+
+          - name: Crear el archivo ZIP
+            run: zip -r ${{ steps.set_names.outputs.ZIP_NAME }} ${{ env.FOLDER_TO_ZIP }}
+
+          - name: Subir ZIP como asset a la release
+            run: |
+              gh release upload \
+              ${{ github.event.release.tag_name }} \
+              ${{ steps.set_names.outputs.ZIP_NAME }}
+            env:
+              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
