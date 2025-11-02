@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ];
 
     const loadSearches = () => {
-        chrome.storage.local.get("searches", (data) => {
+        chrome.storage.sync.get("searches", (data) => {
             const searches = data.searches || [];
             searchList.innerHTML = "";
             searches.forEach((search, index) => {
@@ -114,7 +114,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             url: newUrl,
                             replaceSpaces
                         };
-                        chrome.storage.local.set({ searches }, loadSearches);
+                        chrome.storage.sync.set({ searches }, loadSearches);
                     }
                 });
             });
@@ -137,7 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 btn.addEventListener("click", (e) => {
                     const index = e.target.closest('button').dataset.index;
                     searches.splice(index, 1);
-                    chrome.storage.local.set({ searches }, loadSearches);
+                    chrome.storage.sync.set({ searches }, loadSearches);
                 });
             });
         });
@@ -148,7 +148,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const name = document.getElementById("search-name").value;
         const url = document.getElementById("search-url").value;
         const replaceSpaces = document.getElementById("replace-spaces").checked;
-        chrome.storage.local.get("searches", (data) => {
+        chrome.storage.sync.get("searches", (data) => {
             const searches = data.searches || [];
             // Generate a unique ID for the new search
             const newSearch = {
@@ -158,7 +158,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 replaceSpaces
             };
             searches.push(newSearch);
-            chrome.storage.local.set({ searches }, () => {
+            chrome.storage.sync.set({ searches }, () => {
                 addSearchForm.reset();
                 loadSearches();
             });
@@ -166,14 +166,14 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     restoreDefaultsButton.addEventListener("click", () => {
-        chrome.storage.local.get("searches", (data) => {
+        chrome.storage.sync.get("searches", (data) => {
             const searches = data.searches || [];
             defaultSearches.forEach((defaultSearch) => {
                 if (!searches.some((search) => search.name === defaultSearch.name)) {
                     searches.push(defaultSearch);
                 }
             });
-            chrome.storage.local.set({ searches }, loadSearches);
+            chrome.storage.sync.set({ searches }, loadSearches);
         });
     });
 

@@ -6,8 +6,8 @@ on:
         types: [created]
 
 permissions:
-    contents: read
-    releases: write
+    contents: write
+
 jobs:
     build_and_upload:
         runs-on: ubuntu-latest
@@ -24,10 +24,10 @@ jobs:
             id: set_names
             run: echo "ZIP_NAME=${{ env.ASSET_NAME_PREFIX }}-${{ github.event.release.tag_name }}.zip" >> $GITHUB_OUTPUT
 
-          - name: Crear el archivo ZIP
+          - name: Create ZIP file
             run: zip -r ${{ steps.set_names.outputs.ZIP_NAME }} ${{ env.FOLDER_TO_ZIP }}
 
-          - name: Subir ZIP como asset a la release
+          - name: Upload ZIP as release asset
             run: |
               gh release upload \
               ${{ github.event.release.tag_name }} \

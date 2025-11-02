@@ -7,7 +7,7 @@ chrome.runtime.onInstalled.addListener((details) => {
         { id: "youtube", name: "YouTube", url: "https://www.youtube.com/results?search_query={query}", replaceSpaces: false }
     ];
 
-    chrome.storage.local.get("searches", (data) => {
+    chrome.storage.sync.get("searches", (data) => {
         let searches = data.searches || [];
 
         // Update existing searches to ensure they have IDs
@@ -37,7 +37,7 @@ chrome.runtime.onInstalled.addListener((details) => {
             }
         });
 
-        chrome.storage.local.set({ searches }, updateContextMenu);
+        chrome.storage.sync.set({ searches }, updateContextMenu);
     });
 });
 
@@ -49,7 +49,7 @@ const updateContextMenu = () => {
             contexts: ["selection"]
         });
 
-        chrome.storage.local.get("searches", (data) => {
+        chrome.storage.sync.get("searches", (data) => {
             let searches = data.searches || [];
             let needsUpdate = false;
 
@@ -64,7 +64,7 @@ const updateContextMenu = () => {
 
             // Update storage if any search was missing an ID
             if (needsUpdate) {
-                chrome.storage.local.set({ searches });
+                chrome.storage.sync.set({ searches });
             }
 
             searches.forEach((search) => {
@@ -84,7 +84,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
 
     console.log("Menu clicked:", info.menuItemId);
 
-    chrome.storage.local.get("searches", (data) => {
+    chrome.storage.sync.get("searches", (data) => {
         const searches = data.searches || [];
         console.log("Available searches:", searches.map(s => ({ id: s.id, name: s.name })));
 
