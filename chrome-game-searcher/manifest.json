@@ -1,0 +1,30 @@
+{
+    "manifest_version": 3,
+    "name": "Game Searcher",
+    "version": "1.0",
+    "description": "Search selected text on various platforms.",
+    "permissions": [
+        "contextMenus",
+        "tabs",
+        "storage"
+    ],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "icons": {
+        "16": "icon16.png",
+        "128": "icon128.png"
+    },
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "icons/*.png",
+                "icons/*.ico"
+            ],
+            "matches": [
+                "<all_urls>"
+            ]
+        }
+    ],
+    "options_page": "options.html"
+}

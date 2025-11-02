@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Searcher - Settings</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #e0f2fe 0%, #dbeafe 100%);
+            color: #1e293b;
+            min-height: 100vh;
+            padding: 3rem 1rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #0ea5e9, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: #64748b;
+            font-size: 1.125rem;
+        }
+
+        .search-item {
+            background: white;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px -2px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .search-item:hover {
+            box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.12);
+            transform: translateY(-2px);
+        }
+
+        .search-item.editing {
+            background: #f8fafc;
+        }
+
+        .search-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .search-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .search-name {
+            font-weight: 600;
+            font-size: 1.125rem;
+            color: #1e293b;
+            margin-bottom: 0.25rem;
+        }
+
+        .search-url {
+            color: #64748b;
+            font-size: 0.875rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .search-badge {
+            display: inline-block;
+            margin-top: 0.5rem;
+            padding: 0.25rem 0.75rem;
+            background: #f1f5f9;
+            color: #64748b;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+        }
+
+        .search-actions {
+            display: flex;
+            gap: 0.5rem;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .search-item:hover .search-actions {
+            opacity: 1;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-icon {
+            padding: 0.5rem;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #0ea5e9, #06b6d4);
+            color: white;
+            box-shadow: 0 2px 4px rgba(14, 165, 233, 0.2);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        .btn-secondary {
+            background: #06b6d4;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #0891b2;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: #64748b;
+        }
+
+        .btn-ghost:hover {
+            background: #f1f5f9;
+        }
+
+        .btn-ghost.delete:hover {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .btn-outline {
+            background: white;
+            color: #64748b;
+            border: 1px solid #e2e8f0;
+        }
+
+        .btn-outline:hover {
+            background: #f8fafc;
+        }
+
+        .edit-form {
+            display: none;
+        }
+
+        .edit-form.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #475569;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #0ea5e9;
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            color: #64748b;
+        }
+
+        input[type="checkbox"] {
+            width: 1.125rem;
+            height: 1.125rem;
+            cursor: pointer;
+            accent-color: #0ea5e9;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .restore-container {
+            text-align: center;
+            margin: 2rem 0 3rem;
+        }
+
+        .add-form-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px -2px rgba(0, 0, 0, 0.08);
+        }
+
+        .add-form-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #0ea5e9, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1.5rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #64748b;
+        }
+
+        .empty-state p:first-child {
+            font-size: 1.125rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .icon {
+            width: 16px;
+            height: 16px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        @media (max-width: 640px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .search-content {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .search-actions {
+                opacity: 1;
+                width: 100%;
+                justify-content: flex-end;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Game Search Settings</h1>
+            <p class="subtitle">Manage your game search engines and customize your search experience</p>
+        </div>
+
+        <div id="search-list"></div>
+
+        <div class="restore-container">
+            <button id="restore-defaults" class="btn btn-secondary">
+                <svg class="icon" viewBox="0 0 24 24">
+                    <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                    <path d="M3 3v5h5" />
+                    <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" />
+                </svg>
+                Restore Default Searches
+            </button>
+        </div>
+
+        <div class="add-form-card">
+            <h2 class="add-form-title">Add New Search</h2>
+            <form id="add-search-form">
+                <div class="form-group">
+                    <label for="search-name">Name</label>
+                    <input type="text" id="search-name" placeholder="e.g., Steam" required>
+                </div>
+                <div class="form-group">
+                    <label for="search-url">URL</label>
+                    <input type="text" id="search-url"
+                        placeholder="e.g., https://store.steampowered.com/search/?term={query}" required>
+                </div>
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="replace-spaces">
+                        Replace spaces with "+"
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M12 5v14M5 12h14" />
+                    </svg>
+                    Add Search
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script src="options.js"></script>
+</body>
+
+</html>
