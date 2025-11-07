@@ -16,6 +16,9 @@ You can edit or delete the services or add your custom URLs in the configuration
 
 ![Configuration](screenshots/config.png)
 
+## TODO
+
+* Investigate if the settings can be synced between accounts. 
 
 ## Contribution
 

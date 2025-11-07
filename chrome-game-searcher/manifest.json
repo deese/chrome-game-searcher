@@ -5,7 +5,6 @@
     "description": "Search selected text on various platforms.",
     "permissions": [
         "contextMenus",
-        "tabs",
         "storage"
     ],
     "background": {
